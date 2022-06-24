@@ -17,11 +17,16 @@ django-health-check = "^3.16"
 django-http-referrer-policy = "^1.1"
 django-permissions-policy = "^4.12"
 django-stubs-ext = "^0.5"
+django-extensions = "^3.1.5"
 
 psycopg2-binary = "^2.9"
 gunicorn = "^20.0"
 python-decouple = "^3.6"
 structlog = "^21.5"
+djangorestframework = "^3.13.1"
+django-cors-headers = "^3.13.0"
+drf-spectacular = "^0.22.1"
+djangorestframework-stubs = "^1.7.0"
 
 
 [tool.poetry.dev-dependencies]
