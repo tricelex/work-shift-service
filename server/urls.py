@@ -19,11 +19,14 @@ from health_check import urls as health_urls
 from server.apps.main import urls as main_urls
 from server.apps.main.views import index
 
+from server.apps.worker import urls as worker_urls
+
 admin.autodiscover()
 
 urlpatterns = [
     # Apps:
     path('main/', include(main_urls, namespace='main')),
+    path('worker/', include(worker_urls, namespace='worker')),
 
     # Health checks:
     path('health/', include(health_urls)),
