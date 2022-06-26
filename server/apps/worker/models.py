@@ -5,7 +5,6 @@ from django.db import models
 
 from server.apps.worker.utils.base_model import BaseAbstractModel
 
-# Create your models here.
 
 class Worker(BaseAbstractModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -15,7 +14,7 @@ class Worker(BaseAbstractModel):
     
     def __str__(self) -> str:
         """Unicode representation for a Worker model."""
-        return f'{self.id - self.get_full_name()}'
+        return f'{str(self.id)} - {self.get_full_name()}'
     
     def get_full_name(self) -> str:
         """Return the first_name plus the last_name, with a space in between."""
@@ -39,3 +38,9 @@ class WorkerShift(BaseAbstractModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     worker = models.ForeignKey(Worker, on_delete=models.PROTECT)
     shift = models.IntegerField(choices=SHIFT_TYPES, default=FIRST_SHIFT)
+    process_date = models.DateField(db_index=True)
+
+    
+    def __str__(self) -> str:
+        """Unicode representation for a WorkerShift model."""
+        return f'{str(self.id)} - {self.worker.get_full_name()}'

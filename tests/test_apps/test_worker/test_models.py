@@ -24,7 +24,7 @@ class WorkerTests(TestCase):
         
         worker = WorkerFactory.create(email='test@example.com')
         
-        self.assertEqual(str(worker), f'Jon Snow')
+        self.assertEqual(str(worker), f'{worker.id} - Jon Snow')
         
 class WorkerShiftTests(TestCase):
     def test_unicode(self):
@@ -33,4 +33,6 @@ class WorkerShiftTests(TestCase):
         worker = WorkerFactory.create(email='test@example.com')
         worker_shift = WorkerShiftFactory.create(worker=worker)
         
-        self.assertEqual(str(worker_shift), f'Jon Snow')
+        self.assertEqual(
+            str(worker_shift), f'{str(worker_shift.id)} - {worker.get_full_name()}'
+        )
