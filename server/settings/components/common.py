@@ -23,7 +23,6 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 INSTALLED_APPS: Tuple[str, ...] = (
     # Your apps go here:
-    'server.apps.main',
     'server.apps.worker',
 
     # Default django apps:
@@ -58,7 +57,7 @@ INSTALLED_APPS: Tuple[str, ...] = (
 
 MIDDLEWARE: Tuple[str, ...] = (
     # Content Security Policy:
-    'csp.middleware.CSPMiddleware',
+    # 'csp.middleware.CSPMiddleware',
 
     # Django:
     'django.middleware.security.SecurityMiddleware',
@@ -232,7 +231,7 @@ SPECTACULAR_SETTINGS = {
     'TITLE': ' API',
     'DESCRIPTION': 'Documentation of API endpoints',
     'VERSION': '1.0.0',
-    'SERVE_PERMISSIONS': ['rest_framework.permissions.IsAdminUser'],
+    # 'SERVE_PERMISSIONS': ['rest_framework.permissions.IsAdminUser'],
     'SERVERS': [
         {'url': 'http://127.0.0.1:8000', 'description': 'Local Development server'},
         {'url': 'https://myapp.com', 'description': 'Production server'},

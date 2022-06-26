@@ -8,9 +8,11 @@ class WorkerSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Worker
+        fields = '__all__'
 
 class WorkerShiftSerializer(serializers.ModelSerializer):
     """Serializer for the WorkerShift model."""
 
     class Meta(object):
         model = WorkerShift
+        fields = '__all__'
