@@ -32,6 +32,9 @@ services:
           - "work-shift-service:dev"
           - "work-shift-service:latest"
           - "*"
+        args:
+          USER_ID: ${UID:-1000}
+          USER_GID: ${GID:-1000}
 
       volumes:
         - django-static:/var/www/django/static

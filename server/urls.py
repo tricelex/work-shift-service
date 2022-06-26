@@ -14,11 +14,11 @@ from django.contrib import admin
 from django.contrib.admindocs import urls as admindocs_urls
 from django.urls import include, path
 from django.views.generic import TemplateView
+from drf_spectacular.views import SpectacularSwaggerView
 from health_check import urls as health_urls
 
 from server.apps.main import urls as main_urls
 from server.apps.main.views import index
-
 from server.apps.worker import urls as worker_urls
 
 admin.autodiscover()
@@ -47,6 +47,14 @@ urlpatterns = [
 
     # It is a good practice to have explicit index view:
     path('', index, name='index'),
+
+    # API
+    path('api/', include('server.api_router')),
+    path(
+        'api/docs/',
+        SpectacularSwaggerView.as_view(url_name='api-schema'),
+        name='api-docs',
+    ),
 ]
 
 if settings.DEBUG:  # pragma: no cover

@@ -7,6 +7,9 @@ LABEL maintainer="mail@sobolevn.me"
 LABEL vendor="wemake.services"
 
 ARG DJANGO_ENV
+ARG USER=web
+ARG USER_ID=1000
+ARG USER_GID=1000
 
 ENV DJANGO_ENV=${DJANGO_ENV} \
   # python:
@@ -35,12 +38,12 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get upgrade -y \
   && apt-get install --no-install-recommends -y \
-    bash \
-    build-essential \
-    curl \
-    gettext \
-    git \
-    libpq-dev \
+  bash \
+  build-essential \
+  curl \
+  gettext \
+  git \
+  libpq-dev \
   # Installing `dockerize` utility:
   # https://github.com/jwilder/dockerize
   && curl -sSLO "https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz" \
@@ -62,13 +65,13 @@ RUN apt-get update && apt-get upgrade -y \
 
 WORKDIR /code
 
-RUN groupadd -r web && useradd -d /code -r -g web web \
-  && chown web:web -R /code \
+RUN groupadd -r ${USER} --gid ${USER_GID} && useradd --uid ${USER_ID} -d /code -r -g ${USER} ${USER} \
+  && chown ${USER}:${USER} -R /code \
   && mkdir -p /var/www/django/static /var/www/django/media \
-  && chown web:web /var/www/django/static /var/www/django/media
+  && chown ${USER}:${USER} /var/www/django/static /var/www/django/media
 
 # Copy only requirements, to cache them in docker layer
-COPY --chown=web:web ./poetry.lock ./pyproject.toml /code/
+COPY --chown=${USER}:${USER} ./poetry.lock ./pyproject.toml /code/
 
 # Project initialization:
 # hadolint ignore=SC2046
@@ -76,8 +79,8 @@ RUN echo "$DJANGO_ENV" && poetry version \
   # Install deps:
   && poetry run pip install -U pip \
   && poetry install \
-    $(if [ "$DJANGO_ENV" = 'production' ]; then echo '--no-dev'; fi) \
-    --no-interaction --no-ansi \
+  $(if [ "$DJANGO_ENV" = 'production' ]; then echo '--no-dev'; fi) \
+  --no-interaction --no-ansi \
   # Cleaning poetry installation's cache for production:
   && if [ "$DJANGO_ENV" = 'production' ]; then rm -rf "$POETRY_CACHE_DIR"; fi
 
@@ -88,7 +91,7 @@ COPY ./docker/django/entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x '/docker-entrypoint.sh'
 
 # Running as non-root user:
-USER web
+USER ${USER}
 
 # We customize how our app is loaded with the custom entrypoint:
 ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
